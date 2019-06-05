@@ -1,5 +1,6 @@
 package com.rustler.REST_Counters.controller;
 
+import com.rustler.REST_Counters.service.CounterService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,37 +13,40 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CounterController {
 
+    private final CounterService counterService;
+
     @Autowired
-    public CounterController() {
+    public CounterController(CounterService counterService) {
+        this.counterService = counterService;
     }
 
     @PostMapping("/counters/{name}")
     public String create(@RequestBody String name) {
-        return name+" created";
+        return this.counterService.create(name);
     }
 
     @PostMapping("/counters/{name}/{value}")
-    public String updateCounter(@RequestBody String name, int value) {
-        return name+" changed";
+    public String updateCounter(@RequestBody String name, Integer value) {
+        return this.counterService.setValue(name, value);
     }
 
     @GetMapping("/counters/{name}")
-    public String getByCounterName(@PathVariable("name") String name) {
-        return "Get value of "+name+" counter";
+    public Integer getByCounterName(@PathVariable("name") String name) {
+        return this.counterService.getValue(name);
     }
 
     @DeleteMapping("/counters/{name}")
     public String delete(@PathVariable("name") String name) {
-        return name + " deleteted";
+        return this.counterService.deleteCounter(name);
     }
 
     @GetMapping("/counters/sum")
     public String getSumCounters() {
-        return "Calculated...";
+        return this.counterService.getSumCounters();
     }
 
     @GetMapping("/counters/list")
     public String getListCounters() {
-        return "List counters:";
+        return "List counters:"+this.counterService.getListCounters();
     }
 }
