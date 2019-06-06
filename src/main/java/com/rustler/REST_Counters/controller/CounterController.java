@@ -11,42 +11,43 @@ import org.springframework.web.bind.annotation.*;
 
 @Api
 @RestController
+@RequestMapping("counters")
 public class CounterController {
 
     private final CounterService counterService;
 
-    @Autowired
     public CounterController(CounterService counterService) {
         this.counterService = counterService;
     }
 
-    @PostMapping("/counters/{name}")
+    @PostMapping("/{name}")
     public String create(@RequestBody String name) {
         return this.counterService.create(name);
     }
 
-    @PostMapping("/counters/{name}/{value}")
+    @PostMapping("/{name}/{value}")
     public String updateCounter(@RequestBody String name, Integer value) {
         return this.counterService.setValue(name, value);
     }
 
-    @GetMapping("/counters/{name}")
+    @GetMapping("/{name}")
     public Integer getByCounterName(@PathVariable("name") String name) {
         return this.counterService.getValue(name);
     }
 
-    @DeleteMapping("/counters/{name}")
+    @DeleteMapping("/{name}")
     public String delete(@PathVariable("name") String name) {
         return this.counterService.deleteCounter(name);
     }
 
-    @GetMapping("/counters/sum")
-    public String getSumCounters() {
+    @GetMapping("/sum")
+    public Integer getSumCounters() {
         return this.counterService.getSumCounters();
     }
 
-    @GetMapping("/counters/list")
+    @GetMapping("/")
     public String getListCounters() {
-        return "List counters:"+this.counterService.getListCounters();
+        return this.counterService.getListCounters();
     }
 }
+

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,13 +45,13 @@ public class CounterService {
         else return "Counter " + name + " not found!";
     }
 
-    public String getSumCounters() {
+    public Integer getSumCounters() {
         Integer sum = 0;
         for (Integer elem : this.counterStorage.values()
              ) {sum += elem;
             
-        };
-        return "Sum of counters = "+sum.toString();
+        }
+        return sum;
     }
 
     public String getListCounters() {

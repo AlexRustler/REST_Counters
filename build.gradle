@@ -1,13 +1,22 @@
-plugins {
-    id 'org.springframework.boot' version '2.1.4.RELEASE'
-    id 'java'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE")
+    }
 }
 
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group 'com.rustler'
 version '1.0-SNAPSHOT'
+
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -27,3 +36,4 @@ dependencies {
     implementation "io.springfox:springfox-swagger-ui:$swaggerVersion"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
