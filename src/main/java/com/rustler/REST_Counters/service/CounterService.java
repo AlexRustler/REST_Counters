@@ -25,8 +25,11 @@ public class CounterService {
     }
 
     public String setValue(String name, Integer value) {
-        this.counterStorage.put(name, value);
-        return "Counter "+name+" set value to "+value.toString();
+        if (this.counterStorage.containsKey(name)) {
+            this.counterStorage.put(name, value);
+            return "Counter " + name + " set value to " + value.toString();
+        }
+        else return "Counter " + name + " not found!";
     }
 
     public Integer getValue(String name) {
@@ -34,8 +37,11 @@ public class CounterService {
     }
 
     public String deleteCounter(String name) {
-        this.counterStorage.remove(name);
-        return "Counter "+name+" deleted.";
+        if (this.counterStorage.containsKey(name)) {
+            this.counterStorage.remove(name);
+            return "Counter " + name + " deleted.";
+        }
+        else return "Counter " + name + " not found!";
     }
 
     public String getSumCounters() {
