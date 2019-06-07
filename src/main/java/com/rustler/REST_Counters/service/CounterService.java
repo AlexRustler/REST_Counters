@@ -1,11 +1,11 @@
 package com.rustler.REST_Counters.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.rustler.REST_Counters.model.Counter;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by User on 05.06.2019.
@@ -13,48 +13,45 @@ import java.util.Map;
 
 @Service
 public class CounterService {
-    private Map<String, Integer> counterStorage;
+    private final Map<String, Counter> counterStorage = new ConcurrentHashMap<>();
 
-    @Autowired
-    public CounterService() {
-        this.counterStorage = new HashMap<>();
-    }
-
-    public String create(String name) {
-        this.counterStorage.put(name, 0);
-        return "Counter "+name+" created.";
-    }
-
-    public String setValue(String name, Integer value) {
-        if (this.counterStorage.containsKey(name)) {
-            this.counterStorage.put(name, value);
-            return "Counter " + name + " set value to " + value.toString();
-        }
-        else return "Counter " + name + " not found!";
-    }
-
-    public Integer getValue(String name) {
+    public Counter create(Counter counter) {
+        String name = counter.getName();
+        this.counterStorage.putIfAbsent(name, counter);
         return this.counterStorage.get(name);
     }
 
-    public String deleteCounter(String name) {
+    public Counter setValue(Counter counter) {
+        String name = counter.getName();
         if (this.counterStorage.containsKey(name)) {
-            this.counterStorage.remove(name);
-            return "Counter " + name + " deleted.";
+            this.counterStorage.replace(name, counter);
+            return this.counterStorage.get(name);
         }
-        else return "Counter " + name + " not found!";
+        return null;
     }
+//
+    public Integer getValue(String name) {
+        if (this.counterStorage.containsKey(name)) {
+            return this.counterStorage.get(name).getCount();
+        }
+        return  null;
+    }
+//
+    public void deleteCounter(String name) {
+       this.counterStorage.remove(name);
 
+    }
+//
     public Integer getSumCounters() {
         Integer sum = 0;
-        for (Integer elem : this.counterStorage.values()
-             ) {sum += elem;
-            
+        for (Counter elem : this.counterStorage.values()
+             ) {sum += elem.getCount();
+
         }
         return sum;
     }
-
-    public String getListCounters() {
-        return this.counterStorage.keySet().toString();
+//
+    public Set<String> getListCountersNames() {
+        return this.counterStorage.keySet();
     }
 }

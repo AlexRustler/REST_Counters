@@ -1,9 +1,13 @@
 package com.rustler.REST_Counters.controller;
 
+import com.rustler.REST_Counters.model.Counter;
 import com.rustler.REST_Counters.service.CounterService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by User on 05.06.2019.
@@ -21,23 +25,23 @@ public class CounterController {
     }
 
     @PostMapping("/{name}")
-    public String create(@RequestBody String name) {
-        return this.counterService.create(name);
+    public Counter create(@RequestBody Counter counter) {
+        return this.counterService.create(counter);
     }
 
-    @PostMapping("/{name}/{value}")
-    public String updateCounter(@RequestBody String name, Integer value) {
-        return this.counterService.setValue(name, value);
+    @PutMapping("/")
+    public Counter updateCounter(@RequestBody Counter counter) {
+        return this.counterService.setValue(counter);
     }
-
+//
     @GetMapping("/{name}")
     public Integer getByCounterName(@PathVariable("name") String name) {
         return this.counterService.getValue(name);
     }
 
     @DeleteMapping("/{name}")
-    public String delete(@PathVariable("name") String name) {
-        return this.counterService.deleteCounter(name);
+    public void delete(@PathVariable("name") String name) {
+        this.counterService.deleteCounter(name);
     }
 
     @GetMapping("/sum")
@@ -46,8 +50,8 @@ public class CounterController {
     }
 
     @GetMapping("/")
-    public String getListCounters() {
-        return this.counterService.getListCounters();
+    public Set<String> getListCountersNames() {
+        return this.counterService.getListCountersNames();
     }
 }
 
