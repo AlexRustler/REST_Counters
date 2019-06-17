@@ -1,12 +1,12 @@
 package com.rustler.REST_Counters.controller;
 
+import com.rustler.REST_Counters.controller.exceptions.NotFoundException;
 import com.rustler.REST_Counters.model.Counter;
 import com.rustler.REST_Counters.service.CounterService;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,8 +30,12 @@ public class CounterController {
     }
 
     @PutMapping("/")
-    public Counter updateCounter(@RequestBody Counter counter) {
-        return this.counterService.setValue(counter);
+    public ResponseEntity<Counter> updateCounter(@RequestBody Counter counter) throws NotFoundException {
+        Counter changedCounter = this.counterService.setValue(counter);
+        if (changedCounter == null) {
+            throw new NotFoundException("Counter "+counter.getName()+" not found!");
+        }
+        return ResponseEntity.accepted().body(changedCounter);
     }
 //
     @GetMapping("/{name}")
