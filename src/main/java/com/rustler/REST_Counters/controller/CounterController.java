@@ -4,6 +4,7 @@ import com.rustler.REST_Counters.controller.exceptions.NotFoundException;
 import com.rustler.REST_Counters.model.Counter;
 import com.rustler.REST_Counters.service.CounterService;
 import io.swagger.annotations.Api;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +26,8 @@ public class CounterController {
     }
 
     @PostMapping("/{name}")
-    public Counter create(@RequestBody Counter counter) {
-        return this.counterService.create(counter);
+    public ResponseEntity<Counter> create(@RequestBody Counter counter) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.counterService.create(counter));
     }
 
     @PutMapping("/")
@@ -39,8 +40,8 @@ public class CounterController {
     }
 //
     @GetMapping("/{name}")
-    public Counter getByCounterName(@PathVariable("name") String name) {
-        return this.counterService.getByName(name);
+    public ResponseEntity<Counter> getByCounterName(@PathVariable("name") String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.counterService.getByName(name));
     }
 
     @DeleteMapping("/{name}")
@@ -49,13 +50,13 @@ public class CounterController {
     }
 
     @GetMapping("/sum")
-    public Counter getSumCounters() {
-        return this.counterService.getSumCounters();
+    public ResponseEntity<Counter> getSumCounters() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.counterService.getSumCounters());
     }
 
     @GetMapping("/")
-    public Set<String> getListCountersNames() {
-        return this.counterService.getListCountersNames();
+    public ResponseEntity<Set<String>> getListCountersNames() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.counterService.getListCountersNames());
     }
 }
 
