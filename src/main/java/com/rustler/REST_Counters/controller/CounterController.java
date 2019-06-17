@@ -35,8 +35,8 @@ public class CounterController {
     }
 //
     @GetMapping("/{name}")
-    public Integer getByCounterName(@PathVariable("name") String name) {
-        return this.counterService.getValue(name);
+    public Counter getByCounterName(@PathVariable("name") String name) {
+        return this.counterService.getByName(name);
     }
 
     @DeleteMapping("/{name}")

@@ -29,14 +29,7 @@ public class CounterService {
         }
         return null;
     }
-//
-    public Integer getValue(String name) {
-        if (this.counterStorage.containsKey(name)) {
-            return this.counterStorage.get(name).getCount();
-        }
-        return  null;
-    }
-//
+
     public void deleteCounter(String name) {
        this.counterStorage.remove(name);
 
@@ -53,5 +46,12 @@ public class CounterService {
 //
     public Set<String> getListCountersNames() {
         return this.counterStorage.keySet();
+    }
+
+    public Counter getByName(String name) {
+        if (this.counterStorage.containsKey(name)) {
+            return this.counterStorage.get(name);
+        }
+        return  null;
     }
 }
