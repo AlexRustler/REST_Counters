@@ -40,8 +40,12 @@ public class CounterController {
     }
 //
     @GetMapping("/{name}")
-    public ResponseEntity<Counter> getByCounterName(@PathVariable("name") String name) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.counterService.getByName(name));
+    public ResponseEntity<Counter> getByCounterName(@PathVariable("name") String name) throws NotFoundException {
+        Counter counter = this.counterService.getByName(name);
+        if (counter == null) {
+            throw new NotFoundException("Counter "+name+" not found!");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(counter);
     }
 
     @DeleteMapping("/{name}")
