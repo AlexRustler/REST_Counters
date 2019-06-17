@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  * Created by User on 05.06.2019.
@@ -35,13 +36,13 @@ public class CounterService {
 
     }
 //
-    public Integer getSumCounters() {
-        Integer sum = 0;
-        for (Counter elem : this.counterStorage.values()
-             ) {sum += elem.getCount();
+    public Counter getSumCounters() {
+        Stream<Counter> stream = this.counterStorage.values().stream();
+        Integer sum = stream.reduce(0,
+                (x, y)-> x + y.getCount(),
+                (x, y)->x + y);
 
-        }
-        return sum;
+        return new Counter("sum", sum);
     }
 //
     public Set<String> getListCountersNames() {

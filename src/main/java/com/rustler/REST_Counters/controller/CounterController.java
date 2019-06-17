@@ -45,7 +45,7 @@ public class CounterController {
     }
 
     @GetMapping("/sum")
-    public Integer getSumCounters() {
+    public Counter getSumCounters() {
         return this.counterService.getSumCounters();
     }
 
