@@ -26,26 +26,28 @@ public class CounterController {
     }
 
     @PostMapping("/{name}")
-    public ResponseEntity<Counter> create(@RequestBody Counter counter) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.counterService.create(counter));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Counter create(@RequestBody Counter counter) {
+        return this.counterService.create(counter);
     }
 
     @PutMapping("/")
-    public ResponseEntity<Counter> updateCounter(@RequestBody Counter counter) throws NotFoundException {
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Counter updateCounter(@RequestBody Counter counter) throws NotFoundException {
         Counter changedCounter = this.counterService.setValue(counter);
         if (changedCounter == null) {
             throw new NotFoundException("Counter "+counter.getName()+" not found!");
         }
-        return ResponseEntity.accepted().body(changedCounter);
+        return changedCounter;
     }
 //
     @GetMapping("/{name}")
-    public ResponseEntity<Counter> getByCounterName(@PathVariable("name") String name) throws NotFoundException {
+    public Counter getByCounterName(@PathVariable("name") String name) throws NotFoundException {
         Counter counter = this.counterService.getByName(name);
         if (counter == null) {
             throw new NotFoundException("Counter "+name+" not found!");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(counter);
+        return counter;
     }
 
     @DeleteMapping("/{name}")
@@ -54,13 +56,13 @@ public class CounterController {
     }
 
     @GetMapping("/sum")
-    public ResponseEntity<Counter> getSumCounters() {
-        return ResponseEntity.status(HttpStatus.OK).body(this.counterService.getSumCounters());
+    public Counter getSumCounters() {
+        return this.counterService.getSumCounters();
     }
 
     @GetMapping("/")
-    public ResponseEntity<Set<String>> getListCountersNames() {
-        return ResponseEntity.status(HttpStatus.OK).body(this.counterService.getListCountersNames());
+    public Set<String> getListCountersNames() {
+        return this.counterService.getListCountersNames();
     }
 }
 
